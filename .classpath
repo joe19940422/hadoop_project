@@ -166,5 +166,35 @@
 	<classpathentry kind="lib" path="C:/Users/user/Desktop/lib/hbase-server-2.0.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/user/Desktop/lib/hbase-client-2.0.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/user/Desktop/lib/hbase-common-2.0.2.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-accumulo-handler-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-beeline-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-cli-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-common-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-contrib-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-druid-handler-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-exec-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-hbase-handler-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-hcatalog-core-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-hcatalog-server-extensions-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-hplsql-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-jdbc-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-jdbc-handler-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-llap-client-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-llap-common-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-llap-common-2.3.3-tests.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-llap-ext-client-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-llap-server-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-llap-tez-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-metastore-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-serde-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-service-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-service-rpc-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-shims-0.23-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-shims-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-shims-common-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-shims-scheduler-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-storage-api-2.4.0.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-testutils-2.3.3.jar"/>
+	<classpathentry kind="lib" path="E:/hive_lib/hive-vector-code-gen-2.3.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
