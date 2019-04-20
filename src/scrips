@@ -1,1 +1,131 @@
 
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+
+import os
+import time
+import json
+from pyspark.sql.types import *
+from pyspark import SparkContext, SparkConf, HiveContext, Row, SQLContext
+
+
+# os.environ['PYSPARK_PYTHON'] = '/data/anaconda3/envs/py35/bin/python'
+
+def load_data_from_dict(o, *keys):
+    oo = o
+    for i, key in enumerate(keys):
+        if not oo:
+            return None
+        if i == (len(keys) - 1):
+            return oo.get(key) if isinstance(oo, dict) else None
+        oo = oo.get(key) if isinstance(oo, dict) else oo
+
+
+# extract base data
+def insurance_base_info_transfer(demon_list):
+    if demon_list:
+     ret = []
+     for item in demon_list:
+        orderid = load_data_from_dict(item, "orderid")
+        is_stu = load_data_from_dict(item, "is_stu")
+        sex = load_data_from_dict(item, "sex")
+        endlat = load_data_from_dict(item, "endlat")
+        age = load_data_from_dict(item, "age")
+        userid = load_data_from_dict(item, "userid")
+        endlng = load_data_from_dict(item, "endlng")
+        startlat = load_data_from_dict(item, "startlat")
+        startlng = load_data_from_dict(item, "startlng")
+        starttime = load_data_from_dict(item, "starttime")
+        date_dt=load_data_from_dict(item, "date")
+        paths = load_data_from_dict(item, "path")
+        value11 = paths
+        for v in value11:
+            t = v[0]
+            v[0] = v[1]
+            v[1] = t
+            if len(v) == 3:
+                # v[2] = int(v[2])
+                v.pop()
+        value11 = str(value11)
+        value11 = value11.replace(r', ', ' ')
+        value11 = value11.replace(r'] [', ',')
+        value11 = value11.replace(r']  [', ',')
+        value11 = value11.replace(r'[[', '')
+        value11 = value11.replace(r']]', '')
+        path = 'SRID=4326;LINESTRING (' + value11 + ')'
+        carno =load_data_from_dict(item, "carno")
+        endtime=load_data_from_dict(item, "endtime")
+        ret.append((orderid, is_stu, sex, endlat, age, userid, endlng, startlat, startlng, starttime, date_dt, path, carno,
+             endtime))
+
+    return ret
+
+
+def convert_to_insurance_base_info(rdd):
+    insurance_items = rdd[0]
+    ret = []
+    for item_ in insurance_items:
+        ret.append(Row(
+        orderid=item_[0],
+        is_stu=item_[1],
+        sex=item_[2],
+        endlat=item_[3],
+        age=item_[4],
+        userid=item_[5],
+        endlng=item_[6],
+        startlat=item_[7],
+        startlng=item_[8],
+        starttime=item_[9],
+        date_dt=item_[10],
+        path=item_[11],
+        carno=item_[12],
+        endtime=item_[13]
+    ))
+    return ret
+
+
+
+
+def process_r(row):
+    insurance = json.loads(row)
+    #    return insurance_base_info_transfer(insurance) ,insurance_item_transfer(insurance)
+    return (insurance_base_info_transfer(insurance),)
+
+
+def insurance_transfer():
+    conf = SparkConf().setAppName('insurance-transfer-hive')
+    sc = SparkContext(conf=conf)
+    hiveContext = HiveContext(sc)
+    hiveContext.sql("set hive.support.quoted.identifiers=none")
+    hiveContext.sql("set hive.exec.dynamic.partition=true")
+    hiveContext.sql("set hive.exec.dynamic.partition.mode=nonstrict")
+    hiveContext.sql("set hive.exec.max.dynamic.partitions = 100000")
+    hiveContext.sql("set hive.exec.max.dynamic.partitions.pernode=10000")
+    hiveContext.sql("set hive.exec.max.created.files=150000")
+
+    data_path = "hdfs://172.30.10.229:9000/user/cyhp/20170701-20170731.json"
+
+    rdd = sc.textFile(data_path)
+    rdd2 = rdd.map(process_r)
+    rdd2.cache()
+
+    baseinfo_schema_list = ['orderid','is_stu','sex','endlat','age','userid','endlng','startlat','startlng','starttime','date_dt','path','carno','endtime']
+    baseinfo_schema_list.sort()
+
+    baseinfo_schema = StructType()
+    for col in baseinfo_schema_list:
+        sf = StructField(col, StringType())
+        baseinfo_schema.add(sf)
+
+    insurance_one_base_info = rdd2.flatMap(convert_to_insurance_base_info)
+    insurance_one_base_info_df = hiveContext.createDataFrame(insurance_one_base_info, schema=baseinfo_schema)
+    insurance_one_base_info_df.write.saveAsTable('ods_temp_zh.demon', mode='overwrite')
+        # sql_str_2 = '''INSERT INTO TABLE  ods_crawler.insurance_{0}_info partition(dt)
+        #             SELECT traceid,trace_time,customer_id,trace_account,update_time,paymentBase,unitPayment,paymentAddress,
+        #     personalPayment,paymentDate,insuranceType,unitName,dt FROM ods_temp.insurance_{0}_info'''.format(name[index])
+        # hiveContext.sql(sql_str_2)
+
+
+if __name__ == '__main__':
+    insurance_transfer()
+
