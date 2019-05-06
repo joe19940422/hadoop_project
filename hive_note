@@ -1,0 +1,4 @@
+
+INSERT OVERWRITE local  DIRECTORY '/mnt2/joe/data'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' 
+select * from table_name;
